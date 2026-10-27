@@ -71,11 +71,34 @@ node scripts/repair_session.mjs self-test               # 编解码与备份链�
 
 `verify` 在发现悬空附件时以退出码 1 结束，便于脚本判断。
 
+## 以 DSH 插件方式使用
+
+本仓库同时是一个 DSH 插件包（`dsh-plugin-session-attachment-repair`）。装上之后，「设置 → 会话附件修复」里就能扫描、预览、备份并写入，不用开终端：
+
+```text
+dsh plugin --profile web add github:chenkui-luo/dsh-session-attachment-repair
+```
+
+刷新页面一次，然后打开「设置 → 会话附件修复」。
+
+没有 dsh CLI 时，把仓库放进 `<profile>/node_modules/dsh-plugin-session-attachment-repair`，并在 `<profile>/cordis.patch.yml` 加一行：
+
+```yaml
+- insert:
+    - id: session-attachment-repair
+      name: 'dsh-plugin-session-attachment-repair'
+```
+
+插件只做转发：调用本仓库自己的 `scripts/repair_session.mjs`（`scan` / `repair` / `verify` / `restore`），把报告原样显示出来。写入与还原都要二次确认，备份由脚本负责；插件不重复实现修复逻辑，因此和 Skill 不会分叉。
+
+本插件已登记到 [dsh-marketplace](https://github.com/chenkui-luo/dsh-marketplace) 的注册表（`registry/plugins/dsh-session-attachment-repair/plugin.json`）。
+
 ## 兼容性与依赖
 
 | 维度 | 状态 |
 | --- | --- |
 | 宿主 | DSH 专用：依赖其会话日志与附件库格式 |
+| 插件形态 | 需要宿主提供 `webServer` 与 `connection` 服务；客户端走 `settings.section` 插槽 |
 | Windows | 已实际执行通过（扫描、修复、校验、备份、还原、自检、回归测试） |
 | macOS / Linux | 未验证；脚本未使用平台专属命令，路径来自 `os.homedir()` 与参数 |
 | Node.js | 需要 ≥ 22.15（`zlib` 的 zstd 同步编解码），缺失会直接报错退出 |

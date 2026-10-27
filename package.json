@@ -1,0 +1,57 @@
+{
+  "name": "dsh-plugin-session-attachment-repair",
+  "version": "1.0.0",
+  "description": "Scan and repair DeepSeek Harness sessions whose requests fail because historical attachments are missing from the local attachment store.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "scripts",
+    "references",
+    "tests",
+    "SKILL.md",
+    "README.md",
+    "LICENSE",
+    "cordis.patch.yml"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  },
+  "scripts": {
+    "test": "node tests/run_tests.mjs",
+    "self-test": "node scripts/repair_session.mjs self-test"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "dsh-market",
+    "deepseek-harness",
+    "session",
+    "attachment",
+    "repair"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chenkui-luo/dsh-session-attachment-repair.git"
+  },
+  "homepage": "https://github.com/chenkui-luo/dsh-session-attachment-repair#readme",
+  "bugs": {
+    "url": "https://github.com/chenkui-luo/dsh-session-attachment-repair/issues"
+  },
+  "author": "chenkui-luo",
+  "engines": {
+    "node": ">=22.15"
+  },
+  "license": "MIT"
+}
